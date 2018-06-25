@@ -61,7 +61,7 @@ def _go_repository_impl(ctx):
 
     _fetch_repo = "@bazel_gazelle_go_repository_tools//:bin/fetch_repo{}".format(executable_extension(ctx))
     args = [
-        ctx.path(Label(_fetch_repo)), 
+        ctx.path(Label(_fetch_repo)),
         '--dest', ctx.path(''),
     ]
     if ctx.attr.remote:
@@ -186,12 +186,12 @@ def _go_repository_tools_impl(ctx):
     ctx.symlink(ctx.path(root_file).dirname, "src/" + prefix)
 
   env = {
-    "GOROOT": go_root,
-    "GOPATH": ctx.path("."),
+    "GOROOT": str(go_root),
+    "GOPATH": str(ctx.path(".")),
   }
 
   for tool in ("fetch_repo", "gazelle"):
-    args = [go_tool, "install", "github.com/bazelbuild/bazel-gazelle/cmd/{}".format(tool)]
+    args = [str(go_tool), "install", "github.com/bazelbuild/bazel-gazelle/cmd/{}".format(tool)]
     result = env_execute(ctx, args, environment = env)
     if result.return_code:
       fail("failed to build {}: {}".format(tool, result.stderr))
